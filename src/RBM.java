@@ -1,18 +1,36 @@
 import java.util.Random;
+import java.applet.*;
+import java.awt.*;
  
  
-public class Main {
+public class RBM extends Applet {
+	
+	final double learning = 0.1;
+    final int visible = 6;
+    final int hidden = 2;
+   
+    int[] states = new int[hidden + visible + 1];
+    double[] weights = new double[hidden * visible + visible + hidden];
+    int[] positiveE = new int[hidden * visible + visible + hidden];
+    int[] negativeE = new int[hidden * visible + visible + hidden];
+	
+	public void paint(Graphics g) {
+		
+
+		//display the string inside the rectangle.
+		
+	        g.drawString("Harry Potter: " + weights[0] + "    " + weights[1], 10, 40);
+            g.drawString("Avatar: " + weights[2] + "    " + weights[3], 10, 60);
+            g.drawString("LOTR3: " + weights[4] + "    " + weights[5], 10, 80);
+            g.drawString("Gladiator: " + weights[6] + "    " + weights[7], 10, 100);
+            g.drawString("Titanic: " + weights[8] + "    " + weights[9], 10, 120);
+            g.drawString("Glitter: " + weights[10] + "    " + weights[11], 10, 140);
+	    }
  
-        public static void main(String[] args) {
+       // public static void main(String[] args) {
+		public void init() {
  
-                final double learning = 0.1;
-                final int visible = 6;
-                final int hidden = 2;
-               
-                int[] states = new int[hidden + visible + 1];
-                double[] weights = new double[hidden * visible + visible + hidden];
-                int[] positiveE = new int[hidden * visible + visible + hidden];
-                int[] negativeE = new int[hidden * visible + visible + hidden];
+                
                
                 for (int i = 0; i < weights.length; i++) {
                 	Random q = new Random();
@@ -37,7 +55,7 @@ public class Main {
                 int count = 0;
                 int data = 1;
                 
-                while (count < 30000) {
+                while (count < 3000000) {
                 	
                 	if (data > 6) {
                 		data = 1;
@@ -157,12 +175,7 @@ public class Main {
                 count++;
                 }
                 
-                System.out.println("Harry Potter: " + weights[0] + "    " + weights[1]);
-                System.out.println("Avatar: " + weights[2] + "    " + weights[3]);
-                System.out.println("LOTR3: " + weights[4] + "    " + weights[5]);
-                System.out.println("Gladiator: " + weights[6] + "    " + weights[7]);
-                System.out.println("Titanic: " + weights[8] + "    " + weights[9]);
-                System.out.println("Glitter: " + weights[10] + "    " + weights[11]);
+                
                 
  
         }
