@@ -37,7 +37,7 @@ public class Main {
                 int count = 0;
                 int data = 1;
                 
-                while (count < 5000000) {
+                while (count < 30000) {
                 	
                 	if (data > 6) {
                 		data = 1;
