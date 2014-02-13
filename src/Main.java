@@ -37,7 +37,7 @@ public class Main {
                 int count = 0;
                 int data = 1;
                 
-                while (count < 1500000) {
+                while (count < 5000000) {
                 	
                 	if (data > 6) {
                 		data = 1;
@@ -50,7 +50,7 @@ public class Main {
                 	} else if (data == 2) {
                 		states[i] = data2[i];
                 	} else if (data == 3) {
-                		states[i] = data6[i];
+                		states[i] = data3[i];
                 	} else if (data == 4) {
                 		states[i] = data4[i];
                 	} else if (data == 5) {
@@ -70,11 +70,9 @@ public class Main {
                                 k++;
                         }
                         sum += weights[hidden * visible + visible + i]; // add bias energy
-                        //System.out.println(sum);
                         Random r = new Random();
                         double kaki = r.nextDouble();
                         double prob = 1 / (1  + Math.exp(- sum));
-                        //System.out.println(prob);
                         if (prob > kaki) {
                                 states[visible + i] = 1;
                         } else {
@@ -99,7 +97,6 @@ public class Main {
                 
                
                 for (int i = 0; i < visible * hidden; i += hidden) {
-                        // update the visible nodes
                         double sum = 0;
                         k = 0;
                         for (int j = 0; j < hidden; j ++) {
@@ -107,11 +104,9 @@ public class Main {
                                 k++;
                         }
                         sum += weights[hidden * visible + (i / hidden)]; // add bias energy
-                       // System.out.println(sum);
                         Random r = new Random();
                         double kaki = r.nextDouble();
                         double prob = 1 / (1  + Math.exp(-sum));
-                        //System.out.println(prob);
                         if (prob > kaki) {
                                 states[(i / hidden)] = 1;
                         } else {
@@ -130,11 +125,9 @@ public class Main {
                                 k++;
                         }
                         sum += weights[hidden * visible + visible + i]; // add bias energy
-                        //System.out.println(sum);
                         Random r = new Random();
                         double kaki = r.nextDouble();
                         double prob = 1 / (1  + Math.exp(-sum));
-                        //System.out.println(prob);
                         if (prob > kaki) {
                                 states[visible + i] = 1;
                         } else {
@@ -161,12 +154,16 @@ public class Main {
                         weights[i] += learning * ((positiveE[i] - negativeE[i])); // divide by 6?
                 }
                data++;
-               count++;}
+               count++;
+               }
                 
-                for (int i = 0; i < weights.length; i++) {
-                	System.out.println(weights[i]);
-                }
-               
+                System.out.println("Harry Potter: " + weights[0] + "    " + weights[1]);
+                System.out.println("Avatar: " + weights[2] + "    " + weights[3]);
+                System.out.println("LOTR3: " + weights[4] + "    " + weights[5]);
+                System.out.println("Gladiator: " + weights[6] + "    " + weights[7]);
+                System.out.println("Titanic: " + weights[8] + "    " + weights[9]);
+                System.out.println("Glitter: " + weights[10] + "    " + weights[11]);
+                
  
         }
        
