@@ -16,9 +16,6 @@ public class RBM extends Applet {
 	
 	public void paint(Graphics g) {
 		
-
-		//display the string inside the rectangle.
-		
 	        g.drawString("Harry Potter: " + weights[0] + "    " + weights[1], 10, 40);
             g.drawString("Avatar: " + weights[2] + "    " + weights[3], 10, 60);
             g.drawString("LOTR3: " + weights[4] + "    " + weights[5], 10, 80);
@@ -27,11 +24,8 @@ public class RBM extends Applet {
             g.drawString("Glitter: " + weights[10] + "    " + weights[11], 10, 140);
 	    }
  
-       // public static void main(String[] args) {
 		public void init() {
- 
-                
-               
+
                 for (int i = 0; i < weights.length; i++) {
                 	Random q = new Random();
                         weights[i] = 0.01 * q.nextDouble();
