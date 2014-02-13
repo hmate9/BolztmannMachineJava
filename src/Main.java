@@ -16,7 +16,7 @@ public class Main {
                
                 for (int i = 0; i < weights.length; i++) {
                 	Random q = new Random();
-                        weights[i] = 2 * q.nextDouble();
+                        weights[i] = 0.01 * q.nextDouble();
                 }
                
                 for (int i = 0; i < states.length - 1; i++) {
@@ -136,26 +136,26 @@ public class Main {
                 }
                
                 // compute negative energies
-                                k = 0;
-                                for (int i = 0; i < visible; i++) {
-                                        for (int j = 0; j < hidden; j++) {
-                                                negativeE[k] = states[i] * states[visible + j];
-                                                k++;
-                                        }
-                                }
-                                for (int i = 0; i < visible + hidden; i++) {
-                                        negativeE[k] = states[i] * states[states.length - 1];
-                                        k++;
-                                }
+                k = 0;
+                for (int i = 0; i < visible; i++) {
+                	for (int j = 0; j < hidden; j++) {
+                		negativeE[k] = states[i] * states[visible + j];
+                        k++;
+                    }
+                }
+                for (int i = 0; i < visible + hidden; i++) {
+                	negativeE[k] = states[i] * states[states.length - 1];
+                    k++;
+                }
                                
                                 
                 // update weights
                 for (int i = 0; i < weights.length; i++) {
                         weights[i] += learning * ((positiveE[i] - negativeE[i])); // divide by 6?
                 }
-               data++;
-               count++;
-               }
+                data++;
+                count++;
+                }
                 
                 System.out.println("Harry Potter: " + weights[0] + "    " + weights[1]);
                 System.out.println("Avatar: " + weights[2] + "    " + weights[3]);
