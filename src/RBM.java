@@ -5,7 +5,7 @@ import java.awt.*;
  
 public class RBM extends Applet {
 	
-	final double learning = 0.1;
+    final double learning = 0.1;
     final int visible = 6;
     final int hidden = 2;
    
@@ -16,7 +16,7 @@ public class RBM extends Applet {
 	
 	public void paint(Graphics g) {
 		
-	        g.drawString("Harry Potter: " + weights[0] + "    " + weights[1], 10, 40);
+	    g.drawString("Harry Potter: " + weights[0] + "    " + weights[1], 10, 40);
             g.drawString("Avatar: " + weights[2] + "    " + weights[3], 10, 60);
             g.drawString("LOTR3: " + weights[4] + "    " + weights[5], 10, 80);
             g.drawString("Gladiator: " + weights[6] + "    " + weights[7], 10, 100);
@@ -163,7 +163,7 @@ public class RBM extends Applet {
                                 
                 // update weights
                 for (int i = 0; i < weights.length; i++) {
-                        weights[i] += learning * ((positiveE[i] - negativeE[i])); // divide by 6?
+                        weights[i] += learning * ((positiveE[i] - negativeE[i]));
                 }
                 data++;
                 count++;
