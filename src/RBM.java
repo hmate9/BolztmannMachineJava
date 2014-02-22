@@ -1,31 +1,131 @@
 import java.util.Random;
 import java.applet.*;
 import java.awt.*;
- 
- 
-public class RBM extends Applet {
+import java.awt.event.*;
+
+public class RBM extends Applet implements KeyListener {
 	
-	final double learning = 0.1;
-    final int visible = 6;
-    final int hidden = 2;
+	private final double LEARNING = 0.1; // learning rate
+    private int visible;
+    private int hidden;
+    
+    boolean showRBM = false;
+    
+    private int[] trainingData;
+    
+    int trainingCases = 0;
+    int counter = 0;
+    int counter2 = 0;
+    
+    String setupInstruction = "How many visible nodes?";
+    String keyboard = "";
+    
+    int setup = 2; // what stage of the setup we are at
    
-    int[] states = new int[hidden + visible + 1];
-    double[] weights = new double[hidden * visible + visible + hidden];
-    int[] positiveE = new int[hidden * visible + visible + hidden];
-    int[] negativeE = new int[hidden * visible + visible + hidden];
+    int[] states;
+    double[] weights;
+    int[] positiveE;
+    int[] negativeE;
+    
+    @Override
+	public void keyTyped(KeyEvent e) {
+		// must implement
+		
+	}
+
+	@Override
+	public void keyPressed(KeyEvent e) {
+		// must implement
+		
+	}
+
+	@Override
+	public void keyReleased(KeyEvent e) {
+		char c = e.getKeyChar();
+		int x = Integer.parseInt(c + "");
+		switch (setup) {
+		case 2:
+			// get visible nodes
+			visible = x;
+			setup++;
+			keyboard += c;
+			setupInstruction = "How many hidden nodes?";
+			break;
+		case 3:
+			// get hidden nodes
+			keyboard = "";
+			hidden = x;
+			setup++;
+			keyboard += c;
+			setupInstruction = "How many training sets?";
+			break;
+		case 4:
+			// get training data number
+			keyboard = "";
+			trainingCases = x;
+			trainingData = new int[visible * trainingCases];
+			setup++;
+			keyboard = "";
+			setupInstruction = "Please enter the data for training set " + String.valueOf(counter + 1);
+			break;
+		default:
+			// get learning data
+			if (counter < trainingCases) {
+				if (counter2 < visible) {
+					setupInstruction = "Please enter the data for training set " + String.valueOf(counter + 1);
+					trainingData[setup - 5] = x;
+					keyboard += c;
+					counter2++;
+					setup++;
+				if (!(counter2 < visible)) {
+					keyboard = "";
+					counter++;
+					setupInstruction = "Please enter the data for training set " + String.valueOf(counter + 1);
+					counter2 = 0;
+					}
+				}
+			 if (!(counter < trainingCases)) {
+				 setupInstruction = "Here are the results...";
+				calculateRBM();
+			 	}
+			}
+			break;
+		}
+		
+		repaint();
+        e.consume();
+
+		
+	}
 	
 	public void paint(Graphics g) {
 		
-	        g.drawString("Harry Potter: " + weights[0] + "    " + weights[1], 10, 40);
-            g.drawString("Avatar: " + weights[2] + "    " + weights[3], 10, 60);
-            g.drawString("LOTR3: " + weights[4] + "    " + weights[5], 10, 80);
-            g.drawString("Gladiator: " + weights[6] + "    " + weights[7], 10, 100);
-            g.drawString("Titanic: " + weights[8] + "    " + weights[9], 10, 120);
-            g.drawString("Glitter: " + weights[10] + "    " + weights[11], 10, 140);
+		g.drawString(setupInstruction, 10, 20);
+		g.drawString(keyboard, 10, 40);
+		
+		if (showRBM) {
+			int temp = 0;
+			for (int i = 0; i < visible * hidden; i += hidden) {
+				for (int j = 0; j < hidden; j++) {
+					g.drawString("" + weights[i + j], 10 + (j * 170), 40 + (temp * 20));
+				}
+				temp++;
+			}
+		}
+            
 	    }
  
 		public void init() {
-
+			addKeyListener( this );
+        }
+		
+		private void calculateRBM() {
+			
+			states = new int[hidden + visible + 1];
+		    weights = new double[hidden * visible + visible + hidden];
+		    positiveE = new int[hidden * visible + visible + hidden];
+		    negativeE = new int[hidden * visible + visible + hidden];
+		    
                 for (int i = 0; i < weights.length; i++) {
                 	Random q = new Random();
                         weights[i] = 0.01 * q.nextDouble();
@@ -47,30 +147,19 @@ public class RBM extends Applet {
                 // end training data
                 
                 int count = 0;
-                int data = 1;
-                
+                int data = 0;
+            
                 while (count < 3000000) {
                 	
-                	if (data > 6) {
-                		data = 1;
+                	if (data > trainingCases - 1) {
+                		data = 0;
                 	}
+                	
                
                 for (int i = 0; i < visible; i++) {
                         // import training data
-                	if (data == 1) {
-                		states[i] = data1[i];
-                	} else if (data == 2) {
-                		states[i] = data2[i];
-                	} else if (data == 3) {
-                		states[i] = data3[i];
-                	} else if (data == 4) {
-                		states[i] = data4[i];
-                	} else if (data == 5) {
-                		states[i] = data5[i];
-                	} else {
-                		states[i] = data6[i];
-                	}
-                        
+                		states[i] = trainingData[i + (data * visible)];
+                	  
                 }
                
                 for (int i = 0; i < hidden; i++) {
@@ -83,9 +172,9 @@ public class RBM extends Applet {
                         }
                         sum += weights[hidden * visible + visible + i]; // add bias energy
                         Random r = new Random();
-                        double kaki = r.nextDouble();
+                        double randomNum = r.nextDouble();
                         double prob = 1 / (1  + Math.exp(- sum));
-                        if (prob > kaki) {
+                        if (prob > randomNum) {
                                 states[visible + i] = 1;
                         } else {
                                 states[visible + i] = 0;
@@ -117,9 +206,9 @@ public class RBM extends Applet {
                         }
                         sum += weights[hidden * visible + (i / hidden)]; // add bias energy
                         Random r = new Random();
-                        double kaki = r.nextDouble();
+                        double randomNum = r.nextDouble();
                         double prob = 1 / (1  + Math.exp(-sum));
-                        if (prob > kaki) {
+                        if (prob > randomNum) {
                                 states[(i / hidden)] = 1;
                         } else {
                                 states[(i / hidden)] = 0;
@@ -138,9 +227,9 @@ public class RBM extends Applet {
                         }
                         sum += weights[hidden * visible + visible + i]; // add bias energy
                         Random r = new Random();
-                        double kaki = r.nextDouble();
+                        double randomNum = r.nextDouble();
                         double prob = 1 / (1  + Math.exp(-sum));
-                        if (prob > kaki) {
+                        if (prob > randomNum) {
                                 states[visible + i] = 1;
                         } else {
                                 states[visible + i] = 0;
@@ -163,16 +252,15 @@ public class RBM extends Applet {
                                 
                 // update weights
                 for (int i = 0; i < weights.length; i++) {
-                        weights[i] += learning * ((positiveE[i] - negativeE[i])); // divide by 6?
+                        weights[i] += LEARNING * ((positiveE[i] - negativeE[i]));
                 }
                 data++;
                 count++;
                 }
                 
-                
-                
- 
-        }
-       
- 
+                showRBM = true;
+                repaint();
+            
+		}
+
 }
